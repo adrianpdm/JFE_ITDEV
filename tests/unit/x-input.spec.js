@@ -6,7 +6,6 @@ import XInput from "../../src/components/XInput.vue"
 const mProps = {
     label: 'props_label',
     value: 'props_value',
-    name: 'props_name',
     inputElement: 'input'
 }
 const mAttrs = {
@@ -80,7 +79,7 @@ describe("XInput", () => {
         const input = wrapper.find(mProps.inputElement)
         const value = 'adrian'
         input.element.value = value
-        it(`emit 'input' event on <input> 'input' event`, () => {
+        it(`emit 'input' event on inputElement 'input' event`, () => {
             vm.$nextTick(() => {
                 input.trigger('input')
                 expect(wrapper.emitted().input[0])
@@ -91,6 +90,16 @@ describe("XInput", () => {
             vm.$nextTick(() => {
                 expect(wrapper.vm.mValue)
                     .to.equal(value)
+            })
+        })
+        it(`correctly update textarea textContent on props 'value' changed`, () => {
+            wrapper.setProps({
+                inputElement: 'textarea',
+                value: 'XYZ'
+            })
+            vm.$nextTick(() => {
+                expect(wrapper.find('textarea').element.textContent.trim())
+                    .to.equal('XYZ')
             })
         })
 
