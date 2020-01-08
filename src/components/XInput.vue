@@ -1,15 +1,22 @@
 <template>
   <div :class="{'x-input': true, 'is-focused': isFocused}">
-    <label class="x-input__label">
-      {{label}}
-    </label>
-    <component :is="inputElement"
-               class="x-input__input"
-               :value="value"
-               @focus="isFocused = true"
-               @blur="isFocused = false"
-               @input="onInput"
-               v-bind="$attrs" />
+    <div style="display: flex; justify-content: space-between; align-center; margin-bottom: 0.5em;">
+      <label class="x-input__label">
+        {{label}}
+      </label>
+      <button class="x-input__btn-clear"
+              :disabled="!value"
+              @click="onClear">
+        Hapus
+      </button>
+    </div>
+    <input v-if="inputElement === 'input'"
+           v-bind="inputElementProps"
+           v-on="inputElementListeners" />
+    <textarea v-else-if="inputElement === 'textarea'"
+              v-bind="inputElementProps"
+              v-on="inputElementListeners">
+    </textarea>
     <XInputState :height="3"
                  :active="isFocused" />
     <p class="x-input__hint">
@@ -40,10 +47,7 @@ export default {
         ].includes(v)
       }
     },
-    value: {},
-    name: {
-      type: String
-    }
+    value: {}
   },
   data() {
     return {
@@ -54,16 +58,40 @@ export default {
   created() {
     this.mValue = this.value
   },
+  computed: {
+    inputElementProps() {
+      return {
+        class: 'x-input__input',
+        value: this.mValue,
+        ...this.$attrs
+      }
+    },
+    inputElementListeners() {
+      return {
+        focus: () => this.isFocused = true,
+        blur: () => this.isFocused = false,
+        input: this.onInput
+      }
+    }
+  },
   methods: {
     onInput(e) {
       this.mValue = e.target.value
-      this.$emit('input', e.target.value)
+      this.emitChange()
+    },
+    onClear() {
+      this.mValue = ''
+      this.emitChange()
+    },
+    emitChange() {
+      this.$emit('input', this.mValue)
     }
   },
   watch: {
     value: {
       immediate: true,
       handler(v) {
+        console.log({ v })
         this.mValue = v
       }
     }
@@ -79,7 +107,32 @@ export default {
     display: block;
     font-size: 1em;
     font-weight: normal;
-    margin-bottom: 0.25em;
+  }
+
+  &__btn-clear {
+    cursor: pointer;
+    padding: 0.5em 1em;
+    border: none;
+    border-radius: 0.25rem;
+
+    font-size: 0.7em;
+    font-weight: bold;
+    color: var(--input-border-active-color);
+
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+    &[disabled] {
+      cursor: not-allowed;
+      color: rgba(0, 0, 0, 0.3);
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+    &:focus {
+      background-color: rgba(0, 0, 0, 0.15);
+    }
   }
 
   &__input {
