@@ -1,5 +1,5 @@
 <template>
-  <i :class="{'x-input__state': true, 'is-active': active}"
+  <i :class="{'x-input__state': true, 'is-active': active, 'is-error': error}"
      :style="style"></i>
 </template>
 
@@ -7,6 +7,10 @@
 export default {
   props: {
     active: {
+      type: Boolean,
+      default: false
+    },
+    error: {
       type: Boolean,
       default: false
     },
@@ -18,7 +22,7 @@ export default {
   computed: {
     style() {
       return {
-        height: typeof this.height === 'number' ? `${this.height}px` : this.height
+        height: typeof this.height === 'number' ? `${this.height}px` : this.height,
       }
     }
   }
@@ -48,6 +52,10 @@ export default {
 
   &.is-active::after {
     width: 100%;
+  }
+
+  &.is-error {
+    background-color: rgba(255, 23, 68, 1);
   }
 }
 </style>
