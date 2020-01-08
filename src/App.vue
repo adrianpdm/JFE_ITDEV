@@ -1,6 +1,19 @@
 <template>
   <div id="app">
-    
+    <XInput input-element="input"
+            name="nama"
+            label="Nama"
+            type="text"
+            placeholder="Masukkan nama Anda..."
+            v-model="name" />
+    <br>
+    <XInput input-element="textarea"
+            name="alamat"
+            label="Alamat"
+            type="text"
+            placeholder="Masukkan alamat Anda..."
+            rows="3"
+            v-model="address" />
   </div>
 </template>
 
@@ -8,11 +21,12 @@
 export default {
   name: 'app',
   components: {
-    
+    XInput: () => import("./components/XInput")
   },
   data() {
     return {
-      
+      name: '',
+      address: ''
     }
   }
 }
@@ -23,9 +37,14 @@ export default {
   box-sizing: border-box;
 }
 html {
+  --input-border-color: rgba(176, 190, 197, 1);
+  --input-border-active-color: rgba(33, 150, 243, 1);
+
+  --input-bg-color: rgba(236, 239, 241, 1);
+
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   width: 100vw;
   height: 100vh;
   margin: 0;
@@ -56,5 +75,12 @@ body {
   border-right-width: 1px;
 
   background-color: white;
+}
+
+button {
+  &:focus,
+  &:active {
+    outline: none;
+  }
 }
 </style>
