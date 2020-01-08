@@ -6,7 +6,8 @@ import XInput from "../../src/components/XInput.vue"
 const mProps = {
     label: 'props_label',
     value: 'props_value',
-    name: 'props_name'
+    name: 'props_name',
+    inputElement: 'input'
 }
 const mAttrs = {
     type: 'attr_type',
@@ -54,9 +55,14 @@ describe("XInput", () => {
             expect(label.is('label'))
                 .to.be.true
         })
-        it('has an <input> element that inherits attributes', () => {
-            const input = wrapper.find('input')
-            expect(input.is('input'))
+        it(`input element matches props 'inputElement'`, () => {
+            const input = wrapper.find(mProps.inputElement)
+            expect(input.is(mProps.inputElement))
+                .to.be.true
+        })
+        it('has an input element that inherits attributes', () => {
+            const input = wrapper.find(mProps.inputElement)
+            expect(input.is(mProps.inputElement))
                 .to.be.true
             Object.keys(mAttrs).forEach(key => {
                 expect(input.attributes()[key])
@@ -71,7 +77,7 @@ describe("XInput", () => {
     })
 
     describe('#events', () => {
-        const input = wrapper.find('input')
+        const input = wrapper.find(mProps.inputElement)
         const value = 'adrian'
         input.element.value = value
         it(`emit 'input' event on <input> 'input' event`, () => {
