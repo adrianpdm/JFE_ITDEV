@@ -47,14 +47,14 @@ export default {
 
     background-color: var(--input-border-active-color);
 
-    transition: width 0.2s ease-in-out;
+    transition: width 0.25s ease-in-out;
   }
 
   &.is-active::after {
     width: 100%;
   }
 
-  &.is-error {
+  &.is-error::after {
     background-color: rgba(255, 23, 68, 1);
   }
 }
