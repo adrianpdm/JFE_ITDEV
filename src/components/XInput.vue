@@ -1,6 +1,6 @@
 <template>
   <div :class="{'x-input': true, 'is-focused': isFocused}">
-    <div style="display: flex; justify-content: space-between; align-center; margin-bottom: 0.5em;">
+    <div style="display: flex; justify-content: space-between; align-center; margin-bottom: 0.3em;">
       <label class="x-input__label">
         {{label}}
       </label>
@@ -18,9 +18,11 @@
               v-on="inputElementListeners">
     </textarea>
     <XInputState :height="3"
-                 :active="isFocused" />
-    <p class="x-input__hint">
-
+                 :active="isFocused"
+                 :error="!!errorMsg" />
+    <p class="x-input__hint"
+       :active="!!errorMsg">
+      {{errorMsg}}
     </p>
   </div>
 </template>
@@ -52,7 +54,8 @@ export default {
   data() {
     return {
       mValue: '',
-      isFocused: false
+      isFocused: false,
+      errorMsg: null
     }
   },
   created() {
@@ -69,12 +72,25 @@ export default {
     inputElementListeners() {
       return {
         focus: () => this.isFocused = true,
-        blur: () => this.isFocused = false,
+        blur: this.onBlur,
         input: this.onInput
       }
     }
   },
   methods: {
+    validate() {
+      if (!this.mValue) {
+        this.errorMsg = `${this.label} harus diisi`
+      } else {
+        this.errorMsg = null
+      }
+      return !this.errorMsg
+    },
+    onBlur(e) {
+      if (this.validate()) {
+        this.isFocused = false
+      }
+    },
     onInput(e) {
       this.mValue = e.target.value
       this.emitChange()
@@ -93,6 +109,11 @@ export default {
       handler(v) {
         console.log({ v })
         this.mValue = v
+      }
+    },
+    mValue: {
+      handler(v){
+        this.validate()
       }
     }
   }
@@ -161,6 +182,38 @@ export default {
 
   &__hint {
     display: block;
+    min-height: 1em;
+    margin: 0;
+    margin-top: 0.5em;
+
+    font-size: 0.85em;
+    color: rgba(211, 47, 47, 1);
+
+    opacity: 0;
+    transition: opacity 0.15s ease-in-out;
+
+    &[active] {
+      opacity: 1;
+      animation: shake 2 0.1s ease-in-out;
+    }
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(0.5em);
+  }
+
+  75% {
+    transform: translateX(-0.5em);
+  }
+
+  100% {
+    transform: translateX(0);
   }
 }
 </style>
