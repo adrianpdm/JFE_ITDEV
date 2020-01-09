@@ -81,13 +81,14 @@ export default {
     validate() {
       if (!this.mValue) {
         this.errorMsg = `${this.label} harus diisi`
+        this.isFocused = true
       } else {
         this.errorMsg = null
       }
       return !this.errorMsg
     },
     onBlur(e) {
-      if (this.validate()) {
+      if (this.validate()){
         this.isFocused = false
       }
     },
