@@ -6,7 +6,6 @@
             type="text"
             placeholder="Masukkan nama Anda..."
             v-model="name" />
-    <br>
     <XInput input-element="textarea"
             name="alamat"
             label="Alamat"
@@ -38,7 +37,7 @@ export default {
 }
 html {
   --input-border-color: rgba(176, 190, 197, 1);
-  --input-border-active-color: rgba(33, 150, 243, 1);
+  --input-border-active-color: rgba(0,200,83,1);
 
   --input-bg-color: rgba(236, 239, 241, 1);
 
@@ -82,5 +81,9 @@ button {
   &:active {
     outline: none;
   }
+}
+
+.x-input + .x-input {
+  margin-top: 2rem;
 }
 </style>
