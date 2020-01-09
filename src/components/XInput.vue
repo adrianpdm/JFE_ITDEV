@@ -139,7 +139,7 @@ export default {
 
     font-size: 0.7em;
     font-weight: bold;
-    color: var(--input-border-active-color);
+    color: rgba(33,150,243,1);
 
     text-transform: uppercase;
     letter-spacing: 1px;
