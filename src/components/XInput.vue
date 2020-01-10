@@ -17,7 +17,7 @@
               v-bind="inputElementProps"
               v-on="inputElementListeners">
     </textarea>
-    <XInputState :height="3"
+    <XInputHint :height="3"
                  :active="isFocused"
                  :error="!!errorMsg" />
     <p class="x-input__hint"
@@ -30,7 +30,7 @@
 <script>
 export default {
   components: {
-    XInputState: () => import('./XInputState')
+    XInputHint: () => import('./XInputHint')
   },
   model: {
     prop: 'value',
