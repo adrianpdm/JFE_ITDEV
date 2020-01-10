@@ -3,16 +3,17 @@ import { mount } from '@vue/test-utils'
 
 import XInput from "../../src/components/XInput.vue"
 
-const mProps = {
+const mProps = Object.freeze({
     label: 'props_label',
     value: 'props_value',
     inputElement: 'input'
-}
-const mAttrs = {
+})
+const mAttrs = Object.freeze({
     type: 'attr_type',
     placeholder: 'attr_placeholder',
     autofocus: true
 }
+)
 const wrapper = mount(XInput, {
     propsData: mProps,
     attrs: mAttrs
@@ -20,12 +21,9 @@ const wrapper = mount(XInput, {
 const should = _should()
 
 describe("XInput", () => {
-    const el = wrapper.element
-    const vm = wrapper.vm
-
     describe("#options", () => {
         it(`has v-model directive of prop 'value' and event 'input'`, () => {
-            expect(vm.$options.model)
+            expect(wrapper.vm.$options.model)
                 .to.exist
                 .and.to.deep.equal({
                     prop: 'value',
@@ -40,11 +38,11 @@ describe("XInput", () => {
             })
         })
         it('correctly setup data as function', () => {
-            expect(typeof vm.$options.data === 'function')
+            expect(typeof wrapper.vm.$options.data === 'function')
                 .to.be.true
         })
         it(`manages its own state of props 'value' as 'mValue'`, () => {
-            expect(vm.mValue)
+            expect(wrapper.vm.mValue)
                 .to.equal(mProps.value)
         })
     })
@@ -77,30 +75,31 @@ describe("XInput", () => {
 
     describe('#events', () => {
         const input = wrapper.find(mProps.inputElement)
-        const value = 'adrian'
-        input.element.value = value
         it(`emit 'input' event on inputElement 'input' event`, () => {
-            vm.$nextTick(() => {
-                input.trigger('input')
-                expect(wrapper.emitted().input[0])
-                    .to.deep.equal([value])
-            })
+            input.trigger('input')
+            expect(wrapper.emitted().input).to.exist;
         })
         it(`correctly updates 'mValue' on 'input' event`, () => {
-            vm.$nextTick(() => {
-                expect(wrapper.vm.mValue)
-                    .to.equal(value)
+            wrapper.setProps({
+                value: 'inputValue'
             })
+            return wrapper.vm.$nextTick()
+                .then(() => {
+                    expect(wrapper.vm.mValue)
+                        .to.equal('inputValue')
+                })
         })
         it(`correctly update textarea textContent on props 'value' changed`, () => {
             wrapper.setProps({
                 inputElement: 'textarea',
                 value: 'XYZ'
             })
-            vm.$nextTick(() => {
-                expect(wrapper.find('textarea').element.textContent.trim())
-                    .to.equal('XYZ')
-            })
+            return wrapper.vm.$nextTick()
+                .then(() => {
+                    const textarea = wrapper.find('textarea')
+                    expect(textarea.is('textarea')).to.be.true;
+                    expect(textarea.element.value).to.equal('XYZ');
+                })
         })
 
     })
