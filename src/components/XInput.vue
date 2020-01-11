@@ -96,27 +96,28 @@ export default {
     },
     onInput(e) {
       this.mValue = e.target.value
+      this.validate()
       this.emitChange()
     },
     onClear() {
       this.mValue = ''
+      this.validate()
       this.emitChange()
     },
     emitChange() {
       this.$emit('input', this.mValue)
+    },
+    reset() {
+      this.mValue = ''
+      this.isFocused = false
+      this.errorMsg = null
     }
   },
   watch: {
     value: {
       immediate: true,
       handler(v) {
-        console.log({ v })
         this.mValue = v
-      }
-    },
-    mValue: {
-      handler(v) {
-        this.validate()
       }
     }
   }

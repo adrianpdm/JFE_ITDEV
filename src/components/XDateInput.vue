@@ -293,11 +293,15 @@ export default {
 
       this.emitChange()
     },
-    onClear() {
+    onClear(showError = true) {
       ;['date', 'month', 'year'].forEach(inputName => {
         this[`m_${inputName}`] = null
-        this.handleError(inputName, 'empty');
-        this.$set(this.isFocused, inputName, true)
+        if (showError) {
+          this.handleError(inputName, 'empty');
+        } else {
+          this.$set(this.errorMsg, inputName, null)
+        }
+        this.$set(this.isFocused, inputName, showError)
       })
       this.emitChange()
     },
@@ -310,6 +314,9 @@ export default {
       Object.keys(payload).forEach(key => {
         this.$emit(`update:${key}`, payload[key])
       })
+    },
+    reset() {
+      this.onClear(false)
     }
   },
 }
@@ -346,12 +353,10 @@ export default {
   }
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 620px) {
   .align-to-box {
     position: relative;
     top: 1rem * 2;
   }
-
-  
 }
 </style>

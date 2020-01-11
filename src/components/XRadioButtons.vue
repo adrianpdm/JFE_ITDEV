@@ -17,7 +17,8 @@
           <input type="radio"
                  :name="name"
                  :value="opt"
-                 v-model="mValue">
+                 v-model="mValue"
+                 @input="onInput">
           <label>
             {{opt}}
           </label>
@@ -75,11 +76,23 @@ export default {
         this.isFocused = false
       }
     },
+    onInput(e){
+      this.mValue = e.target.value
+      this.validate()
+      this.emitChange()
+    },
     onClear() {
       this.mValue = null
+      this.validate()
+      this.emitChange()
     },
     emitChange() {
       this.$emit('input', this.mValue)
+    },
+    reset() {
+      this.mValue = ''
+      this.isFocused = false
+      this.errorMsg = null
     }
   },
   watch: {
@@ -87,13 +100,6 @@ export default {
       immediate: true,
       handler(v) {
         this.mValue = v
-      }
-    },
-    mValue: {
-      immediate: false,
-      handler(v) {
-        this.emitChange()
-        this.validate()
       }
     }
   }
