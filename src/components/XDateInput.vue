@@ -68,7 +68,8 @@
                   :error="!!errorMsg.year" />
     </div>
     <p class="x-base__hint--list"
-       :active="hasErrors">
+       :active="hasErrors"
+       :key="errorsLength">
       <ul>
         <template v-for="(msg, inputName) in errorMsg">
           <li v-if="msg"
@@ -139,8 +140,11 @@ export default {
     )
   },
   computed: {
+    errorsLength() {
+      return Object.keys(this.errorMsg).filter(key => !!this.errorMsg[key]).length
+    },
     hasErrors() {
-      return Object.keys(this.errorMsg).some(key => !!this.errorMsg[key])
+      return this.errorsLength > 0
     },
     currentYear() {
       return new Date().getFullYear()
