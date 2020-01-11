@@ -267,6 +267,8 @@ export default {
       if (typeof value === 'string' && value.startsWith('0')) {
         this[`m_${name}`] = `${parseInt(value)}`
       }
+
+      this.emitChange()
     },
     onInput(e) {
       const { name } = e.target
@@ -276,6 +278,8 @@ export default {
       this.validationTimer = setTimeout(() => {
         this.validateInput(name)
       }, 300)
+
+      this.emitChange()
     },
     onClear() {
       ;['date', 'month', 'year'].forEach(inputName => {
@@ -294,7 +298,7 @@ export default {
         this.$emit(`update:${key}`, payload[key])
       })
     }
-  }
+  },
 }
 </script>
 
