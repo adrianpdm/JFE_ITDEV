@@ -1,5 +1,19 @@
 <template>
   <div id="app">
+    <header id="app-header">
+      <h1 id="form-title">
+        Form Pendaftaran
+      </h1>
+      <button class="btn-action action-new"
+              style="flex: 0 0 auto;"
+              @click="onCreateNewForm">
+        <b>+</b>&nbsp;&nbsp;Buat Form Baru
+      </button>
+    </header>
+    <p id="form-desc">
+      Lengkapi isian di bawah ini sesuai dengan informasi yang diminta.
+    </p>
+    <br>
     <div id="form">
       <XInput input-element="input"
               name="nama"
@@ -49,6 +63,19 @@ export default {
       },
       gender: ''
     }
+  },
+  methods: {
+    onCreateNewForm() {
+      const children = this.$children
+      if (!children || !children.length) return;
+      children.forEach(child => {
+        if (typeof child.reset === 'function') {
+          child.reset()
+        } else {
+          throw new Error('Each child in form must have reset method')
+        }
+      })
+    }
   }
 }
 </script>
@@ -66,6 +93,7 @@ html {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-size: 18px;
+  min-width: 320px;
   width: 100vw;
   height: 100vh;
   margin: 0;
@@ -84,9 +112,10 @@ body {
 }
 
 #app {
-  max-width: 800px;
+  max-width: 700px;
   margin: 0 auto;
-  padding: 2rem 0;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
 
   border-style: solid;
   border-color: #ddd;
@@ -96,7 +125,15 @@ body {
 
   background-color: white;
 
-  text-align: center;
+  text-align: left;
+}
+
+#app-header {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
 }
 
 #form {
@@ -104,18 +141,50 @@ body {
   text-align: left;
 }
 
-@media screen and (max-width: 599px) {
+#form-title {
+  margin-top: 0.25em;
+  display: inline-block;
+  flex: 0 0 auto;
+  word-break: break-all;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 619px) {
   .large-only {
     display: none;
   }
 
+  html {
+    font-size: 15px;
+  }
+
+  #app {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  #form-title {
+    order: 2;
+  }
+
+  .btn-action.action-new {
+    order: 1;
+  }
+
+  #form-title,
+  #form-desc,
   #form {
-    width: 300px;
+    width: 100%;
+  }
+
+  #form {
+    width: 100%;
 
     > * {
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 0.5rem;
+      margin-bottom: 0.5em;
 
       > *:nth-child(1) {
         align-self: center;
@@ -133,11 +202,16 @@ body {
   }
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 620px) {
+  #app {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
   #form {
     > * {
       display: grid;
-      grid-template-columns: 120px 320px 120px;
+      grid-template-columns: 120px 300px 120px;
       gap: 0 1rem;
       align-items: baseline;
 
@@ -145,17 +219,18 @@ body {
         width: 100%;
         height: 100%;
         overflow: hidden;
-        text-align: right !important;
+        // text-align: right !important;
       }
 
       > *:nth-child(2) {
-        width: 320px;
+        width: 100%;
       }
     }
   }
 }
 
 button {
+  background-color: transparent;
   &:focus,
   &:active {
     outline: none;
@@ -278,6 +353,34 @@ button {
 
   100% {
     transform: translateX(0);
+  }
+}
+
+.btn-action {
+  cursor: pointer;
+  padding: 0.5em 1em;
+  border-radius: 9999px;
+  border: none;
+
+  font-size: 0.85em;
+  font-weight: 400;
+  letter-spacing: 1px;
+  border: 1px solid rgba(33, 150, 243, 1);
+  color: rgba(33, 150, 243, 1);
+
+  transition-property: background-color, color;
+  transition-duration: 0.1s;
+  transition-timing-function: ease-out;
+
+  &:active,
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0.5em 0 rgba(0, 145, 255, 0.516);
+  }
+
+  &:hover {
+    color: white;
+    background-color: rgba(33, 150, 243, 1);
   }
 }
 </style>
