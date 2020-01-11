@@ -1,10 +1,10 @@
 <template>
   <div :class="{'x-input': true, 'is-focused': isFocused}">
-    <div style="display: flex; justify-content: space-between; align-center; margin-bottom: 0.3em;">
-      <label class="x-input__label">
+    <div class="x-base__input-header">
+      <label class="x-base__label">
         {{label}}
       </label>
-      <button class="x-input__btn-clear"
+      <button class="x-base__btn-clear"
               :disabled="!value"
               @click="onClear">
         Hapus
@@ -20,7 +20,7 @@
     <XInputHint :height="3"
                  :active="isFocused"
                  :error="!!errorMsg" />
-    <p class="x-input__hint"
+    <p class="x-base__hint"
        :active="!!errorMsg">
       {{errorMsg}}
     </p>
@@ -64,7 +64,7 @@ export default {
   computed: {
     inputElementProps() {
       return {
-        class: 'x-input__input',
+        class: 'x-base__input',
         value: this.mValue,
         ...this.$attrs
       }
@@ -124,80 +124,6 @@ export default {
 <style lang="scss" scoped>
 .x-input {
   font-size: 1rem;
-
-  &__label {
-    display: block;
-    font-size: 1em;
-    font-weight: normal;
-  }
-
-  &__btn-clear {
-    cursor: pointer;
-    padding: 0.5em 1em;
-    border: none;
-    border-radius: 0.25rem;
-
-    font-size: 0.7em;
-    font-weight: bold;
-    color: rgba(33,150,243,1);
-
-    text-transform: uppercase;
-    letter-spacing: 1px;
-
-    &[disabled] {
-      cursor: not-allowed;
-      color: rgba(0, 0, 0, 0.3);
-    }
-
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.1);
-    }
-    &:focus {
-      background-color: rgba(0, 0, 0, 0.15);
-    }
-  }
-
-  &__input {
-    display: block;
-    width: 100%;
-    padding: 0.5em;
-
-    border-radius: 0.25rem;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border: 1px solid var(--input-border-color);
-    border-bottom-width: 0;
-    background-color: var(--input-bg-color);
-
-    font-size: 1.15em;
-    transition: all 0.15s ease-out;
-
-    &::placeholder {
-      color: rgba(0, 0, 0, 0.25);
-    }
-    &:focus,
-    &:active {
-      outline: none;
-    }
-  }
-
-  &__hint {
-    display: block;
-    min-height: 1em;
-    margin: 0;
-    margin-top: 0.5em;
-
-    font-size: 0.85em;
-    color: rgba(211, 47, 47, 1);
-
-    opacity: 0;
-    transition: opacity 0.15s ease-in-out;
-
-    &[active] {
-      opacity: 1;
-      animation: shake 2 0.1s ease-in-out;
-    }
-  }
 }
 
 @keyframes shake {
