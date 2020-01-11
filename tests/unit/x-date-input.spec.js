@@ -37,7 +37,7 @@ describe('XDateInput', () => {
             "date-input": {
                 type: "number",
                 min: 1,
-                max: 1
+                max: 31
             },
             "month-input": {
                 type: "number",
@@ -56,7 +56,7 @@ describe('XDateInput', () => {
             expect(arr.length).to.be.gte(inputRoles.length);
             inputRoles.forEach(role => {
                 assert.exists(
-                    arr.find(w => w.attributes().role === role),
+                    arr.filter(w => w.attributes().role === role),
                     `XDateInput must have input of role ${role}`
                 )
             })
