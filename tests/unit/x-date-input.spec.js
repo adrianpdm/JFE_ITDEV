@@ -8,12 +8,7 @@ const mProps = Object.freeze({
     label: 'props_label',
     date: 1,
     month: 1,
-    year: 2020,
-    placeholders: {
-        date: '01',
-        month: '01',
-        year: '2020'
-    }
+    year: 2020
 })
 
 const mAttrs = Object.freeze({
@@ -22,7 +17,11 @@ const mAttrs = Object.freeze({
 
 const mState = Object.freeze({
     errorMsg: '',
-    isFocused: false,
+    isFocused: {
+        date: false,
+        month: false,
+        year: false,
+    },
     mDate: null,
     mMonth: null,
     mYear: null
@@ -65,9 +64,9 @@ describe('XDateInput', () => {
                 max: 12
             },
             "year-input": {
-                type: "text",
-                min: 4,
-                max: 4
+                type: "number",
+                min: 1900,
+                max: new Date().getFullYear()
             }
         }
         const inputRoles = Object.keys(inputs)
@@ -80,6 +79,15 @@ describe('XDateInput', () => {
                     `XDateInput must have input of role ${role}`
                 )
             })
+        })
+        it('each input should have preceded by a label', () => {
+            const arr = wrapper.findAll('input')
+            expect(arr.length).to.be.gte(inputRoles.length);
+            for (let i = 0; i < arr.length; i++) {
+                const w = arr.at(i)
+                expect(w.element.previousSibling).to.exist;
+                expect(w.element.previousSibling.tagName).to.equal('LABEL');
+            }
         })
         it('has proper attributes for each input elements', () => {
             for (let role in inputs) {
