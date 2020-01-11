@@ -11,8 +11,7 @@
         Hapus
       </button>
     </div>
-    <div v-show="isMounted"
-         class="x-date-input__inputs">
+    <div class="x-date-input__inputs">
       <label class="x-date-input__input-label">
         Tanggal
       </label>
@@ -59,7 +58,7 @@
              name="year"
              class="x-base__input"
              type="number"
-             :min="0"
+             :min="1900"
              :max="currentYear"
              v-model="m_year"
              v-on="inputElementListeners"
@@ -107,7 +106,6 @@ export default {
   },
   data() {
     return {
-      isMounted: false,
       errorMsg: {
         date: null,
         month: null,
@@ -138,11 +136,6 @@ export default {
       { immediate: true }
     )
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.isMounted = true
-    })
-  },
   computed: {
     hasErrors() {
       return Object.keys(this.errorMsg).some(key => !!this.errorMsg[key])
@@ -162,11 +155,44 @@ export default {
     }
   },
   methods: {
-    validateInput(e) {
-      if (!e || !e.target) return;
+    getInputElement(name) {
+      const el = this.$el.querySelector((`input[name="${name}"]`))
+      if (!el) {
+        throw new ReferenceError(`can't find input[name="${name}"]`)
+      }
+      return el
+    },
+    isValidDateValue() {
+      const [d, m, y] = [
+        parseInt(this.m_date),
+        parseInt(this.m_month),
+        parseInt(this.m_year)
+      ]
+      if (!m || !y) return true;
+      if (!d) throw 'empty';
+      if (d < 1 || d > 31) throw 'minmax';
 
-      const { name, min, max, value } = e.target
-      const label = e.target.getAttribute('label')
+      const isLeap = (y % 4 === 0 && y % 100 !== 0)
+        || (y % 400 == 0)
+
+      if (m === 2) {
+        if (isLeap && d > 29) {
+          throw 'gt_feb29'
+        }
+        if (!isLeap && d > 28) {
+          throw 'gt_feb28'
+        }
+      }
+      if ([4, 6, 9, 11].includes(m) && d > 30) {
+        throw 'gt_30days'
+      }
+      return true
+    },
+    validateInput(name) {
+      const el = this.getInputElement(name)
+      const { min, max, value } = el
+      const label = el.getAttribute('label')
+
       if (!name) {
         throw new ReferenceError('input element must be named')
       }
@@ -177,21 +203,51 @@ export default {
         if (typeof value !== 'string') {
           throw 'invalidtype'
         }
-        if (!value.length){
+        if (!value.length) {
           throw 'empty'
         }
         if ((+value < +min) || (+value > +max)) {
           throw 'minmax'
         }
         this.$set(this.errorMsg, name, null)
-        return true
       } catch (e) {
-        if (e === 'empty') {
-          this.$set(this.errorMsg, name, `${label} harus diisi`)
-        } else if (e === 'minmax') {
-          this.$set(this.errorMsg, name, `${label} harus bernilai antara ${min} s/d ${max}`)
+        this.handleError(name, e)
+      }
+
+      try {
+        if (this.m_date && this.m_month && this.m_year) {
+          if (this.isValidDateValue()) {
+            this.$set(this.errorMsg, 'date', null)
+          }
         }
-        return false
+      } catch (e) {
+        this.handleError('date', e)
+      }
+    },
+    handleError(inputName, msg) {
+      const el = this.getInputElement(inputName)
+      const { min, max, value } = el
+      const label = el.getAttribute('label')
+
+      const err = (e) => {
+        this.$set(this.errorMsg, inputName, e)
+      }
+      switch (msg) {
+        case 'empty':
+          err(`${label} harus diisi`)
+          break
+        case 'minmax':
+          err(`${label} harus bernilai antara ${min} s/d ${max}`)
+          break
+        case 'gt_feb29':
+          err(`Bulan ini tidak lebih dari 29 hari`)
+          break
+        case 'gt_feb28':
+          err(`Bulan ini tidak lebih dari 28 hari`)
+          break
+        case 'gt_30days':
+          err(`Bulan ini tidak lebih dari 30 hari`)
+          break
       }
     },
     onFocus(e) {
@@ -203,19 +259,23 @@ export default {
     },
     onBlur(e) {
       const { name, value } = e.target
-      this.$set(this.isFocused, name, !this.validateInput(e));
-      
+      this.validateInput(name);
+      this.$set(this.isFocused, name, !!this.errorMsg[name]);
+
       if (typeof value === 'string' && value.startsWith('0')) {
         this[`m_${name}`] = `${parseInt(value)}`
       }
     },
     onInput(e) {
-      this.validateInput(e);
+      const { name } = e.target
+      this.validateInput(name)
     },
     onClear() {
-      this.m_date = null
-      this.m_month = null
-      this.m_year = null
+      ;['date', 'month', 'year'].forEach(inputName => {
+        this[`m_${inputName}`] = null
+        this.$set(this.errorMsg, inputName, null)
+        this.$set(this.isFocused, inputName, false)
+      })
     },
     emitChange() {
       const payload = {
