@@ -13,6 +13,9 @@
             placeholder="Masukkan alamat Anda..."
             rows="3"
             v-model="address" />
+    <XDateInput name="tanggal_lahir"
+                label="Tanggal Lahir"
+                v-bind="birthDate" />
   </div>
 </template>
 
@@ -20,12 +23,18 @@
 export default {
   name: 'app',
   components: {
-    XInput: () => import("./components/XInput")
+    XInput: () => import("./components/XInput"),
+    XDateInput: () => import("./components/XDateInput"),
   },
   data() {
     return {
       name: '',
-      address: ''
+      address: '',
+      birthDate: {
+        date: null,
+        month: null,
+        year: null
+      }
     }
   }
 }
@@ -37,7 +46,7 @@ export default {
 }
 html {
   --input-border-color: rgba(176, 190, 197, 1);
-  --input-border-active-color: rgba(0,200,83,1);
+  --input-border-active-color: rgba(0, 200, 83, 1);
 
   --input-bg-color: rgba(236, 239, 241, 1);
 
@@ -85,5 +94,86 @@ button {
 
 .x-input + .x-input {
   margin-top: 2rem;
+}
+
+.x-base__input-header {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 0.3em;
+}
+
+.x-base__label {
+  display: block;
+  font-size: 1em;
+  font-weight: normal;
+}
+
+.x-base__input {
+  display: block;
+  width: 100%;
+  padding: 0.5em;
+
+  border-radius: 0.25rem;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border: 1px solid var(--input-border-color);
+  border-bottom-width: 0;
+  background-color: var(--input-bg-color);
+
+  font-size: 1.15em;
+  transition: all 0.15s ease-out;
+
+  &::placeholder {
+    color: rgba(0, 0, 0, 0.25);
+  }
+  &:focus,
+  &:active {
+    outline: none;
+  }
+}
+
+.x-base__btn-clear {
+  cursor: pointer;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 0.25rem;
+
+  font-size: 0.7em;
+  font-weight: bold;
+  color: rgba(33, 150, 243, 1);
+
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  &[disabled] {
+    cursor: not-allowed;
+    color: rgba(0, 0, 0, 0.3);
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  &:focus {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+}
+
+.x-base__hint {
+  display: block;
+  min-height: 1em;
+  margin: 0;
+  margin-top: 0.5em;
+
+  font-size: 0.85em;
+  color: rgba(211, 47, 47, 1);
+
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out;
+
+  &[active] {
+    opacity: 1;
+    animation: shake 2 0.1s ease-in-out;
+  }
 }
 </style>
