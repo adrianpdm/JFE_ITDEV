@@ -1,30 +1,32 @@
 <template>
   <div id="app">
-    <XInput input-element="input"
-            name="nama"
-            label="Nama"
-            type="text"
-            placeholder="Masukkan nama Anda..."
-            v-model="name" />
-    <br>
-    <XDateInput name="tanggal_lahir"
-                label="Tanggal Lahir"
-                :placeholders="{date: '1', month: '1', year: '1980'}"
-                :date.sync="birthDate.date"
-                :month.sync="birthDate.month"
-                :year.sync="birthDate.year" />
-    <br>
-    <XInput input-element="textarea"
-            name="alamat"
-            label="Alamat"
-            type="text"
-            placeholder="Masukkan alamat Anda..."
-            rows="3"
-            v-model="address" />
-    <br>
-    <XRadioButtons label="Jenis Kelamin"
-                   :options="['Laki-laki', 'Perempuan']"
-                   v-model="gender" />
+    <div id="form">
+      <XInput input-element="input"
+              name="nama"
+              label="Nama"
+              type="text"
+              placeholder="Masukkan nama Anda..."
+              v-model="name" />
+      <br>
+      <XDateInput name="tanggal_lahir"
+                  label="Tanggal Lahir"
+                  :placeholders="{date: '1', month: '1', year: '1980'}"
+                  :date.sync="birthDate.date"
+                  :month.sync="birthDate.month"
+                  :year.sync="birthDate.year" />
+      <br>
+      <XInput input-element="textarea"
+              name="alamat"
+              label="Alamat"
+              type="text"
+              placeholder="Masukkan alamat Anda..."
+              rows="3"
+              v-model="address" />
+      <br>
+      <XRadioButtons label="Jenis Kelamin"
+                     :options="['Laki-laki', 'Perempuan']"
+                     v-model="gender" />
+    </div>
   </div>
 </template>
 
@@ -57,7 +59,7 @@ export default {
 }
 html {
   --input-border-color: rgba(176, 190, 197, 1);
-  --input-border-active-color: rgba(67,160,71,1);
+  --input-border-active-color: rgba(67, 160, 71, 1);
 
   --input-bg-color: rgba(236, 239, 241, 1);
 
@@ -77,15 +79,14 @@ body {
   margin: 0;
   padding: 0;
   background-color: #f5f5f5;
+
+  text-align: center;
 }
 
 #app {
-  display: block;
-  width: 100%;
   max-width: 800px;
-  height: auto;
   margin: 0 auto;
-  padding: 4rem;
+  padding: 2rem 0;
 
   border-style: solid;
   border-color: #ddd;
@@ -94,6 +95,64 @@ body {
   border-right-width: 1px;
 
   background-color: white;
+
+  text-align: center;
+}
+
+#form {
+  display: inline-block;
+  text-align: left;
+}
+
+@media screen and (max-width: 599px) {
+  .large-only {
+    display: none;
+  }
+
+  #form {
+    width: 300px;
+
+    > * {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.5rem;
+
+      > *:nth-child(1) {
+        align-self: center;
+      }
+
+      > *:nth-child(2) {
+        order: 3;
+        grid-column: 1 / span 2;
+      }
+
+      > *:nth-child(3) {
+        order: 2;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 600px) {
+  #form {
+    > * {
+      display: grid;
+      grid-template-columns: 120px 320px 120px;
+      gap: 0 1rem;
+      align-items: baseline;
+
+      > *:nth-child(1) {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        text-align: right !important;
+      }
+
+      > *:nth-child(2) {
+        width: 320px;
+      }
+    }
+  }
 }
 
 button {
@@ -104,16 +163,19 @@ button {
 }
 
 .x-base__input-header {
+  min-height: 1.5rem;
   display: flex;
+  flex: 0 0 auto;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5em;
 }
 
 .x-base__label {
+  width: 100%;
   display: block;
   font-size: 1em;
   font-weight: normal;
+  color: rgba(84, 110, 122, 1);
 }
 
 .x-base__input {
@@ -122,10 +184,7 @@ button {
   padding: 0.5em;
 
   border-radius: 0.25rem;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
   border: 1px solid var(--input-border-color);
-  border-bottom-width: 0;
   background-color: var(--input-bg-color);
 
   font-size: 1.15em;
@@ -133,6 +192,7 @@ button {
 
   &::placeholder {
     color: rgba(0, 0, 0, 0.25);
+    font-size: 0.85em;
   }
   &:focus,
   &:active {
@@ -198,10 +258,10 @@ button {
 
   li {
     line-height: 1.2;
-    padding: 0.5em 0;
+    padding: 0.2em 0;
+    opacity: 0.75;
   }
 }
-
 
 @keyframes shake {
   0% {
