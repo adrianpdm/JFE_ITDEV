@@ -22,18 +22,18 @@
                 <button class="btn-action"
                         :disabled="row_index === 0"
                         text="Ke Atas"
-                        data-icon="↑"
+                        data-icon="↑  "
                         @click="onMoveUp(row, row_index)">
                 </button>
                 <button class="btn-action"
                         :disabled="!mData[row_index + 1]"
                         text="Ke Bawah"
-                        data-icon="↓"
+                        data-icon="↓  "
                         @click="onMoveDown(row, row_index)">
                 </button>
                 <button class="btn-action btn-danger"
                         text="Hapus"
-                        data-icon="✗"
+                        data-icon="✗  "
                         @click="onRemove(row, row_index)">
                 </button>
               </th>
@@ -135,7 +135,7 @@ export default {
         return truthy
       })
     },
-    validate(){
+    validate() {
       return this.validateAll()
     },
     getCellValue(item, index, column) {
@@ -351,14 +351,17 @@ export default {
 }
 
 .btn-action {
-  &::after {
+  &::before {
     content: attr(data-icon) + attr(text);
     display: inline;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
   }
 
   @media screen and (max-width: 450px) {
-    &::after {
+    &::before {
       content: attr(data-icon);
+      font-size: 1.3em;
     }
   }
 }
