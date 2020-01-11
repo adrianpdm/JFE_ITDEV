@@ -6,6 +6,12 @@
             type="text"
             placeholder="Masukkan nama Anda..."
             v-model="name" />
+    <br>
+    <XDateInput name="tanggal_lahir"
+                label="Tanggal Lahir"
+                :placeholders="{date: 'Tanggal', month: 'Bulan', year: 'Tahun'}"
+                v-bind="birthDate" />
+    <br>
     <XInput input-element="textarea"
             name="alamat"
             label="Alamat"
@@ -13,9 +19,6 @@
             placeholder="Masukkan alamat Anda..."
             rows="3"
             v-model="address" />
-    <XDateInput name="tanggal_lahir"
-                label="Tanggal Lahir"
-                v-bind="birthDate" />
   </div>
 </template>
 
@@ -92,14 +95,10 @@ button {
   }
 }
 
-.x-input + .x-input {
-  margin-top: 2rem;
-}
-
 .x-base__input-header {
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 0.3em;
 }
 
@@ -159,7 +158,7 @@ button {
   }
 }
 
-.x-base__hint {
+%base-hint {
   display: block;
   min-height: 1em;
   margin: 0;
@@ -174,6 +173,24 @@ button {
   &[active] {
     opacity: 1;
     animation: shake 2 0.1s ease-in-out;
+  }
+}
+
+.x-base__hint {
+  @extend %base-hint;
+}
+
+.x-base__hint--list {
+  @extend %base-hint;
+  ul {
+    list-style-position: outside;
+    margin: 0;
+    padding-left: 1em;
+  }
+
+  li {
+    line-height: 1.2;
+    padding: 0.5em 0;
   }
 }
 </style>
