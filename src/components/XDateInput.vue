@@ -226,6 +226,11 @@ export default {
         this.handleError('date', e)
       }
     },
+    validate() {
+      ;['date', 'month', 'year'].forEach(name => {
+        this.validateInput(name)
+      })
+    },
     handleError(inputName, errorType) {
       const el = this.getInputElement(inputName)
       const { min, max, value } = el
@@ -287,6 +292,7 @@ export default {
         this.handleError(inputName, 'empty');
         this.$set(this.isFocused, inputName, false)
       })
+      this.emitChange()
     },
     emitChange() {
       const payload = {
