@@ -17,51 +17,67 @@
         Tanggal
       </label>
       <input role="date-input"
+             label="Tanggal"
              name="date"
              class="x-base__input"
              type="number"
-             min="1"
-             max="31"
-             v-model="mDate"
+             :min="1"
+             :max="31"
+             v-model="m_date"
              v-on="inputElementListeners"
              style="width: 72px;">
       <XInputHint :height="3"
                   :active="isFocused.date"
-                  :error="!!errorMsg" />
+                  :error="!!errorMsg.date" />
+      <span class="x-date-input__divider">
+        /
+      </span>
       <label class="x-date-input__input-label">
         Bulan
       </label>
       <input role="month-input"
+             label="Bulan"
              name="month"
              class="x-base__input"
              type="number"
-             min="1"
-             max="12"
-             v-model="mMonth"
+             :min="1"
+             :max="12"
+             v-model="m_month"
              v-on="inputElementListeners"
              style="width: 72px;">
       <XInputHint :height="3"
                   :active="isFocused.month"
-                  :error="!!errorMsg" />
+                  :error="!!errorMsg.month" />
+      <span class="x-date-input__divider">
+        /
+      </span>
       <label class="x-date-input__input-label">
         Tahun
       </label>
       <input role="year-input"
+             label="Tahun"
              name="year"
              class="x-base__input"
              type="number"
-             min="1900"
-             max="currentYear"
-             v-model="mYear"
+             :min="0"
+             :max="currentYear"
+             v-model="m_year"
              v-on="inputElementListeners"
              style="width: 144px;">
       <XInputHint :height="3"
                   :active="isFocused.year"
-                  :error="!!errorMsg" />
+                  :error="!!errorMsg.year" />
     </div>
-    <p class="x-date-input__hint"
-       :active="errorMsg">
-      {{errorMsg}}
+    <p class="x-base__hint--list"
+       :active="hasErrors">
+      <ul>
+        <template v-for="(msg, inputName) in errorMsg">
+          <li v-if="msg"
+              :key="inputName">
+            {{msg}}
+          </li>
+        </template>
+      </ul>
     </p>
   </div>
 </template>
@@ -92,15 +108,19 @@ export default {
   data() {
     return {
       isMounted: false,
-      errorMsg: '',
+      errorMsg: {
+        date: null,
+        month: null,
+        year: null
+      },
       isFocused: {
         date: false,
         month: false,
         year: false
       },
-      mDate: null,
-      mMonth: null,
-      mYear: null
+      m_date: null,
+      m_month: null,
+      m_year: null
     }
   },
   created() {
@@ -111,9 +131,9 @@ export default {
       },
       function (obj) {
         const { date, month, year } = this
-        this.mDate = date
-        this.mMonth = month
-        this.mYear = year
+        this.m_date = date
+        this.m_month = month
+        this.m_year = year
       },
       { immediate: true }
     )
@@ -124,49 +144,84 @@ export default {
     })
   },
   computed: {
+    hasErrors() {
+      return Object.keys(this.errorMsg).some(key => !!this.errorMsg[key])
+    },
     currentYear() {
       return new Date().getFullYear()
     },
     shouldButtonDisabled() {
-      return [this.mDate, this.mMonth, this.mYear].every(val => !val)
+      return [this.m_date, this.m_month, this.m_year].every(val => !val)
     },
     inputElementListeners() {
       return {
         focus: this.onFocus,
-        blur: this.onBlur
+        blur: this.onBlur,
+        input: this.onInput
       }
     }
   },
   methods: {
-    validate() {
-      return true
+    validateInput(e) {
+      if (!e || !e.target) return;
+
+      const { name, min, max, value } = e.target
+      const label = e.target.getAttribute('label')
+      if (!name) {
+        throw new ReferenceError('input element must be named')
+      }
+      if (!label) {
+        throw new ReferenceError('input element must be have label attribute')
+      }
+      try {
+        if (typeof value !== 'string') {
+          throw 'invalidtype'
+        }
+        if (!value.length){
+          throw 'empty'
+        }
+        if ((+value < +min) || (+value > +max)) {
+          throw 'minmax'
+        }
+        this.$set(this.errorMsg, name, null)
+        return true
+      } catch (e) {
+        if (e === 'empty') {
+          this.$set(this.errorMsg, name, `${label} harus diisi`)
+        } else if (e === 'minmax') {
+          this.$set(this.errorMsg, name, `${label} harus bernilai antara ${min} s/d ${max}`)
+        }
+        return false
+      }
     },
     onFocus(e) {
       if (!e.target.name) {
         console.error('input element must be named.')
         return
       }
-      this.isFocused[e.target.name] = true
+      this.$set(this.isFocused, e.target.name, true)
     },
     onBlur(e) {
-      if (!e.target.name) {
-        console.error('input element must be named.')
-        return
-      }
-      if (this.validate()) {
-        this.isFocused[e.target.name] = false
+      const { name, value } = e.target
+      this.$set(this.isFocused, name, !this.validateInput(e));
+      
+      if (typeof value === 'string' && value.startsWith('0')) {
+        this[`m_${name}`] = `${parseInt(value)}`
       }
     },
+    onInput(e) {
+      this.validateInput(e);
+    },
     onClear() {
-      this.mDate = null
-      this.mMonth = null
-      this.mYear = null
+      this.m_date = null
+      this.m_month = null
+      this.m_year = null
     },
     emitChange() {
       const payload = {
-        date: this.mDate,
-        month: this.mMonth,
-        year: this.mYear
+        date: this.m_date,
+        month: this.m_month,
+        year: this.m_year
       }
       Object.keys(payload).forEach(key => {
         this.$emit(`update:${key}`, payload[key])
@@ -184,10 +239,10 @@ export default {
     min-width: 0;
     width: auto;
     display: grid;
-    grid-template-columns: repeat(3, minmax(min-content, max-content));
+    grid-template-columns: repeat(5, minmax(min-content, max-content));
     grid-template-rows: repeat(3, auto);
     grid-auto-flow: column;
-    grid-gap: 0 2rem;
+    grid-gap: 0 0.5rem;
 
     > .x-date-input__input-label {
       opacity: 0.65;
@@ -204,5 +259,18 @@ export default {
       margin-left: 1rem;
     }
   }
+}
+
+.x-date-input__divider {
+  grid-row: 1 / span 3;
+
+  display: flex;
+  align-items: center;
+  width: 0.5em;
+  padding-top: 0.85em;
+
+  color: currentColor;
+
+  opacity: 0.5;
 }
 </style>
