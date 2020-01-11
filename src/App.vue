@@ -9,7 +9,7 @@
     <br>
     <XDateInput name="tanggal_lahir"
                 label="Tanggal Lahir"
-                :placeholders="{date: 'Tanggal', month: 'Bulan', year: 'Tahun'}"
+                :placeholders="{date: '1', month: '1', year: '1980'}"
                 :date.sync="birthDate.date"
                 :month.sync="birthDate.month"
                 :year.sync="birthDate.year" />
@@ -107,7 +107,7 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.3em;
+  margin-bottom: 0.5em;
 }
 
 .x-base__label {
@@ -199,6 +199,25 @@ button {
   li {
     line-height: 1.2;
     padding: 0.5em 0;
+  }
+}
+
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(0.5em);
+  }
+
+  75% {
+    transform: translateX(-0.5em);
+  }
+
+  100% {
+    transform: translateX(0);
   }
 }
 </style>
