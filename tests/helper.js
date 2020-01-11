@@ -1,6 +1,10 @@
 import { assert, expect } from 'chai'
 
 export function isVueWrapper(wrapper) {
+    assert.isTrue(
+        typeof wrapper.isVueInstance === 'function',
+        'wrapper must be a created using mount() or shallowMount()'
+    )
     expect(wrapper.isVueInstance()).to.be.true
 }
 
@@ -13,11 +17,10 @@ export function hasRequiredProps(wrapper, requiredProps) {
     })
 }
 
-export function hasRequiredState(wrapper, requiredState) {
-    isVueWrapper(wrapper)
-    const $data = typeof wrapper.vm.$data === 'function'
-        ? wrapper.vm.$data()
-        : wrapper.vm.$data
+export function hasRequiredState(Component, requiredState) {
+    const $data = typeof Component.data === 'function'
+        ? Component.data()
+        : Component.data
 
     const check = (actual, expected, rootKey = '') => {
         Object.keys(expected).forEach(key => {
