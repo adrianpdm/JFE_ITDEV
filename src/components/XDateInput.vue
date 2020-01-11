@@ -118,7 +118,9 @@ export default {
       },
       m_date: null,
       m_month: null,
-      m_year: null
+      m_year: null,
+
+      validationTimer: null
     }
   },
   created() {
@@ -224,7 +226,7 @@ export default {
         this.handleError('date', e)
       }
     },
-    handleError(inputName, msg) {
+    handleError(inputName, errorType) {
       const el = this.getInputElement(inputName)
       const { min, max, value } = el
       const label = el.getAttribute('label')
@@ -232,7 +234,7 @@ export default {
       const err = (e) => {
         this.$set(this.errorMsg, inputName, e)
       }
-      switch (msg) {
+      switch (errorType) {
         case 'empty':
           err(`${label} harus diisi`)
           break
@@ -268,12 +270,17 @@ export default {
     },
     onInput(e) {
       const { name } = e.target
-      this.validateInput(name)
+      if (this.validationTimer) {
+        clearTimeout(this.validationTimer)
+      }
+      this.validationTimer = setTimeout(() => {
+        this.validateInput(name)
+      }, 300)
     },
     onClear() {
       ;['date', 'month', 'year'].forEach(inputName => {
         this[`m_${inputName}`] = null
-        this.$set(this.errorMsg, inputName, null)
+        this.handleError(inputName, 'empty');
         this.$set(this.isFocused, inputName, false)
       })
     },
