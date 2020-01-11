@@ -10,7 +10,9 @@
     <XDateInput name="tanggal_lahir"
                 label="Tanggal Lahir"
                 :placeholders="{date: 'Tanggal', month: 'Bulan', year: 'Tahun'}"
-                v-bind="birthDate" />
+                :date.sync="birthDate.date"
+                :month.sync="birthDate.month"
+                :year.sync="birthDate.year" />
     <br>
     <XInput input-element="textarea"
             name="alamat"
