@@ -1,0 +1,48 @@
+.btn-action {
+  cursor: pointer;
+  padding: 0.5em 1em;
+  border-radius: 9999px;
+  border: none;
+
+  font-size: 0.85em;
+  font-weight: 400;
+  letter-spacing: 1px;
+  border: 1px solid rgba(33, 150, 243, 1);
+  color: rgba(33, 150, 243, 1);
+
+  transition-property: background-color, color;
+  transition-duration: 0.1s;
+  transition-timing-function: ease-out;
+
+  &:active,
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0.5em 0 rgba(0, 145, 255, 0.516);
+  }
+
+  &:not([disabled]) {
+    &:hover,
+    &:focus {
+      color: white;
+      background-color: rgba(33, 150, 243, 1);
+    }
+  }
+
+  & + & {
+    margin-left: 0.5em;
+  }
+
+  &.btn-danger {
+    border: 1px solid rgba(229, 57, 53, 1);
+    color: rgba(229, 57, 53, 1);
+
+    &:not([disabled]) {
+      &:hover,
+      &:focus {
+        color: white;
+        background-color: rgba(229, 57, 53, 1);
+        box-shadow: 0 0 0.5em 0 rgba(229, 57, 53, 0.5);
+      }
+    }
+  }
+}
