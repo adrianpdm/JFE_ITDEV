@@ -8,7 +8,12 @@ const mProps = Object.freeze({
     label: 'props_label',
     date: 1,
     month: 1,
-    year: 2020
+    year: 2020,
+    placeholders: {
+        date: '10',
+        month: '10',
+        year: '3000'
+    }
 })
 
 const mAttrs = Object.freeze({
