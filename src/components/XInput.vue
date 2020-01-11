@@ -5,7 +5,7 @@
         {{label}}
       </label>
       <button class="x-base__btn-clear"
-              :disabled="!value"
+              :disabled="!mValue"
               @click="onClear">
         Hapus
       </button>
