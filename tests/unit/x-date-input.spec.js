@@ -69,7 +69,7 @@ describe('XDateInput', () => {
             },
             "year-input": {
                 type: "number",
-                min: 0,
+                min: 1900,
                 max: new Date().getFullYear()
             }
         }
