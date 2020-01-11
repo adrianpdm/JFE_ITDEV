@@ -1,6 +1,8 @@
 import { assert, expect, should as _should } from 'chai'
 import { mount } from '@vue/test-utils'
 
+import Helper from "../helper"
+
 import XInput from "../../src/components/XInput.vue"
 
 const mProps = Object.freeze({
@@ -31,15 +33,10 @@ describe("XInput", () => {
                 })
         })
         it('has required props', () => {
-            Object.keys(mProps).forEach(key => {
-                let actual = wrapper.props(key)
-                let expected = mProps[key]
-                assert.equal(actual, expected, `has props '${key}'`)
-            })
+            Helper.hasRequiredProps(wrapper, mProps)
         })
         it('correctly setup data as function', () => {
-            expect(typeof wrapper.vm.$options.data === 'function')
-                .to.be.true
+            Helper.isDataSetupAsFunction(wrapper)
         })
         it(`manages its own state of props 'value' as 'mValue'`, () => {
             expect(wrapper.vm.mValue)
