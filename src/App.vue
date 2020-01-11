@@ -14,43 +14,51 @@
       Lengkapi isian di bawah ini sesuai dengan informasi yang diminta.
     </p>
     <br>
-    <div id="form">
-      <XInput input-element="input"
-              name="nama"
-              label="Nama"
-              type="text"
-              placeholder="Masukkan nama Anda..."
-              v-model="name" />
-      <br>
-      <XDateInput name="tanggal_lahir"
-                  label="Tanggal Lahir"
-                  :placeholders="{date: '1', month: '1', year: '1980'}"
-                  :date.sync="birthDate.date"
-                  :month.sync="birthDate.month"
-                  :year.sync="birthDate.year" />
-      <br>
-      <XInput input-element="textarea"
-              name="alamat"
-              label="Alamat"
-              type="text"
-              placeholder="Masukkan alamat Anda..."
-              rows="3"
-              v-model="address" />
-      <br>
-      <XRadioButtons label="Jenis Kelamin"
-                     :options="['Laki-laki', 'Perempuan']"
-                     v-model="gender" />
-    </div>
+    <transition name="slide-fade"
+                mode="out-in">
+      <div id="form"
+           :key="formId">
+        <XInput input-element="input"
+                name="nama"
+                label="Nama"
+                type="text"
+                placeholder="Masukkan nama Anda..."
+                v-model="name" />
+        <br>
+        <XDateInput name="tanggal_lahir"
+                    label="Tanggal Lahir"
+                    :placeholders="{date: '1', month: '1', year: '1980'}"
+                    :date.sync="birthDate.date"
+                    :month.sync="birthDate.month"
+                    :year.sync="birthDate.year" />
+        <br>
+        <XInput input-element="textarea"
+                name="alamat"
+                label="Alamat"
+                type="text"
+                placeholder="Masukkan alamat Anda..."
+                rows="3"
+                v-model="address" />
+        <br>
+        <XRadioButtons label="Jenis Kelamin"
+                       :options="['Laki-laki', 'Perempuan']"
+                       v-model="gender" />
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
+import XInput from "./components/XInput"
+import XDateInput from "./components/XDateInput"
+import XRadioButtons from "./components/XRadioButtons"
+
 export default {
   name: 'app',
   components: {
-    XInput: () => import("./components/XInput"),
-    XDateInput: () => import("./components/XDateInput"),
-    XRadioButtons: () => import("./components/XRadioButtons"),
+    XInput,
+    XDateInput,
+    XRadioButtons,
   },
   data() {
     return {
@@ -61,20 +69,25 @@ export default {
         month: null,
         year: null
       },
-      gender: ''
+      gender: '',
+
+      formId: 1
     }
   },
   methods: {
     onCreateNewForm() {
-      const children = this.$children
-      if (!children || !children.length) return;
-      children.forEach(child => {
-        if (typeof child.reset === 'function') {
-          child.reset()
-        } else {
-          throw new Error('Each child in form must have reset method')
-        }
-      })
+      this.formId++;
+      this.$nextTick()
+        .then(() => {
+          this.name = ''
+          this.address = ''
+          this.birthDate = {
+            date: null,
+            month: null,
+            year: null
+          }
+          this.gender = ''
+        })
     }
   }
 }
@@ -381,6 +394,19 @@ button {
   &:hover {
     color: white;
     background-color: rgba(33, 150, 243, 1);
+  }
+}
+
+.slide-fade {
+  &-enter,
+  &-leave-to {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+
+  &-enter-to,
+  &-leave-to {
+    transition: all 0.5s ease-in-out;
   }
 }
 </style>
