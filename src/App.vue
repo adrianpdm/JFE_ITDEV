@@ -19,6 +19,10 @@
             placeholder="Masukkan alamat Anda..."
             rows="3"
             v-model="address" />
+    <br>
+    <XRadioButtons label="Jenis Kelamin"
+                   :options="['Laki-laki', 'Perempuan']"
+                   v-model="gender" />
   </div>
 </template>
 
@@ -28,6 +32,7 @@ export default {
   components: {
     XInput: () => import("./components/XInput"),
     XDateInput: () => import("./components/XDateInput"),
+    XRadioButtons: () => import("./components/XRadioButtons"),
   },
   data() {
     return {
@@ -37,7 +42,8 @@ export default {
         date: null,
         month: null,
         year: null
-      }
+      },
+      gender: ''
     }
   }
 }
@@ -49,7 +55,7 @@ export default {
 }
 html {
   --input-border-color: rgba(176, 190, 197, 1);
-  --input-border-active-color: rgba(0, 200, 83, 1);
+  --input-border-active-color: rgba(67,160,71,1);
 
   --input-bg-color: rgba(236, 239, 241, 1);
 
@@ -75,7 +81,7 @@ body {
   display: block;
   width: 100%;
   max-width: 800px;
-  height: 100%;
+  height: auto;
   margin: 0 auto;
   padding: 4rem;
 
