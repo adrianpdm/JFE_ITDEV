@@ -21,6 +21,11 @@ export function hasRequiredState(Component, requiredState) {
     const $data = typeof Component.data === 'function'
         ? Component.data()
         : Component.data
+    
+    assert.isTrue(
+        typeof $data === 'object' && !!$data,
+        'component data must be defined'
+    )
 
     const check = (actual, expected, namespace = '') => {
         Object.keys(expected).forEach(key => {
@@ -37,7 +42,11 @@ export function hasRequiredState(Component, requiredState) {
                 )
                 check(actual[key], expected[key], ns)
             } else {
-                assert.strictEqual(actual[key], expected[key])
+                assert.strictEqual(
+                    actual[key],
+                    expected[key],
+                    `unmatched type and/or value for ${key} in ${namespace || 'data'}`
+                )
             }
         })
     }
