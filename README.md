@@ -9,5 +9,6 @@ Jabar Digital Service
 - No dependencies aside from core-js and vuejs.
 - Components are unit-tested using Mocha and Chai.
 - Live preview of form data in JSON format.
+- Responsive design
 
 [**Open in Github Pages**](https://adrianpdm.github.io/JFE_ITDEV "adrianpdm.github.io/JFE_ITDEV/")
