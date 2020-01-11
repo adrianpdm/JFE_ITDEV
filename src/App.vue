@@ -44,12 +44,23 @@
                        :options="['Laki-laki', 'Perempuan']"
                        v-model="gender" />
         <br>
+        <br>
         <XTableInput :columns="tableColumns"
                      :data-template="jobHistoryTemplate"
                      v-model="jobHistory"
-                     label="Riwayat Pekerjaan" />
+                     label="Riwayat Pekerjaan (kosongkan jika tidak ada)" />
       </div>
     </transition>
+    <br>
+    <br>
+    <br>
+    <div style="display: flex; justify-content: flex-end;">
+      <button class="btn-action"
+              @click="onSubmit"
+              style="font-size: 1em; float:right;">
+        Daftar
+      </button>
+    </div>
   </div>
 </template>
 
@@ -122,9 +133,19 @@ export default {
       formId: 1
     }
   },
+  created() {
+    this.initHistory()
+  },
   methods: {
-    onCreateNewForm() {
-      this.formId++;
+    initHistory() {
+      this.jobHistory = [
+        // JSON.parse(JSON.stringify(this.jobHistoryTemplate))
+      ]
+    },
+    onCreateNewForm(animate = true) {
+      if (animate) {
+        this.formId++;
+      }
       this.$nextTick()
         .then(() => {
           this.name = ''
@@ -135,7 +156,35 @@ export default {
             year: null
           }
           this.gender = ''
-          this.jobHistory = []
+          this.initHistory()
+        })
+    },
+    onEraseAllData() {
+      const r = confirm('Hapus semua data?')
+      if (r == true) {
+        this.onCreateNewForm(false)
+      }
+    },
+    onSubmit() {
+      this.$nextTick()
+        .then(() => {
+          const children = this.$children
+          if (!children || !children.length) return;
+
+          let isValid = true
+          for (let child of children) {
+            if (typeof child.validate === 'function') {
+              isValid = child.validate() && isValid
+            } else {
+              console.error('Each form field must provide validate fn')
+            }
+          }
+
+          if (!isValid) {
+            setTimeout(() => {
+              alert('Lengkapi seluruh isian terlebih dahulu sebelum mengirimkan data')
+            }, 500)
+          }
         })
     }
   }
@@ -199,6 +248,7 @@ body {
 }
 
 #form {
+  width: 100%;
   display: inline-block;
   text-align: left;
 }
@@ -209,6 +259,14 @@ body {
   flex: 0 0 auto;
   word-break: break-all;
   overflow: hidden;
+}
+
+.clearfix {
+  &::before {
+    content: "";
+    display: table;
+    clear: both;
+  }
 }
 
 @media screen and (max-width: 619px) {
@@ -240,8 +298,6 @@ body {
   }
 
   #form {
-    width: 100%;
-
     > *:not(.x-table-input) {
       display: grid;
       grid-template-columns: 1fr auto;
@@ -273,7 +329,7 @@ body {
   #form {
     > *:not(.x-table-input) {
       display: grid;
-      grid-template-columns: 120px 300px 120px;
+      grid-template-columns: 120px 1fr 120px;
       gap: 0 1rem;
       align-items: baseline;
 
@@ -381,7 +437,7 @@ button {
   transition: opacity 0.15s ease-in-out;
 
   &[active] {
-    opacity: 1;
+    opacity: 0.85;
     animation: shake 2 0.1s ease-in-out;
   }
 }
@@ -394,14 +450,14 @@ button {
   @extend %base-hint;
   ul {
     list-style-position: outside;
+    list-style-type: none;
     margin: 0;
-    padding-left: 1em;
+    padding-left: 0;
   }
 
   li {
     line-height: 1.2;
     padding: 0.2em 0;
-    opacity: 0.75;
   }
 }
 
@@ -445,9 +501,12 @@ button {
     box-shadow: 0 0 0.5em 0 rgba(0, 145, 255, 0.516);
   }
 
-  &:not([disabled]):hover {
-    color: white;
-    background-color: rgba(33, 150, 243, 1);
+  &:not([disabled]) {
+    &:hover,
+    &:focus {
+      color: white;
+      background-color: rgba(33, 150, 243, 1);
+    }
   }
 
   & + & {
@@ -458,14 +517,13 @@ button {
     border: 1px solid rgba(229, 57, 53, 1);
     color: rgba(229, 57, 53, 1);
 
-    &:hover {
-      color: white;
-      background-color: rgba(229, 57, 53, 1);
-    }
-
-    &:active,
-    &:focus {
-      box-shadow: 0 0 0.5em 0 rgba(229, 57, 53, 0.5);
+    &:not([disabled]) {
+      &:hover,
+      &:focus {
+        color: white;
+        background-color: rgba(229, 57, 53, 1);
+        box-shadow: 0 0 0.5em 0 rgba(229, 57, 53, 0.5);
+      }
     }
   }
 }
