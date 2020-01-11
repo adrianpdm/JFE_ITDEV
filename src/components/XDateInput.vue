@@ -22,6 +22,7 @@
              type="number"
              :min="1"
              :max="31"
+             :placeholder="placeholders.date"
              v-model="m_date"
              v-on="inputElementListeners"
              style="width: 72px;">
@@ -41,6 +42,7 @@
              type="number"
              :min="1"
              :max="12"
+             :placeholder="placeholders.month"
              v-model="m_month"
              v-on="inputElementListeners"
              style="width: 72px;">
@@ -60,6 +62,7 @@
              type="number"
              :min="1900"
              :max="currentYear"
+             :placeholder="placeholders.year"
              v-model="m_year"
              v-on="inputElementListeners"
              style="width: 144px;">
@@ -103,6 +106,10 @@ export default {
     year: {
       type: [String, Number],
       default: null
+    },
+    placeholders: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
