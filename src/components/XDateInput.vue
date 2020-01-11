@@ -70,6 +70,9 @@ export default {
     XInputHint: () => import("./XInputHint")
   },
   props: {
+    label: {
+      type: String
+    },
     date: {
       type: [String, Number],
       default: null
