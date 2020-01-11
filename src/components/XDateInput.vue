@@ -1,5 +1,6 @@
 <template>
-  <div class="x-date-input">
+  <div class="x-date-input"
+       v-cloak>
     <div class="x-base__input-header">
       <label class="x-base__label">
         {{label}}
@@ -10,7 +11,8 @@
         Hapus
       </button>
     </div>
-    <div class="x-date-input__inputs">
+    <div v-show="isMounted"
+         class="x-date-input__inputs">
       <label class="x-date-input__input-label">
         Tanggal
       </label>
@@ -65,9 +67,10 @@
 </template>
 
 <script>
+import XInputHint from "./XInputHint"
 export default {
   components: {
-    XInputHint: () => import("./XInputHint")
+    XInputHint
   },
   props: {
     label: {
@@ -88,6 +91,7 @@ export default {
   },
   data() {
     return {
+      isMounted: false,
       errorMsg: '',
       isFocused: {
         date: false,
@@ -113,6 +117,11 @@ export default {
       },
       { immediate: true }
     )
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.isMounted = true
+    })
   },
   computed: {
     currentYear() {
