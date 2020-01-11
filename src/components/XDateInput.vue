@@ -198,6 +198,7 @@ export default {
       return true
     },
     validateInput(name) {
+      let isValid = true
       const el = this.getInputElement(name)
       const { min, max, value } = el
       const label = el.getAttribute('label')
@@ -220,6 +221,7 @@ export default {
         }
         this.$set(this.errorMsg, name, null)
       } catch (e) {
+        isValid = false
         this.handleError(name, e)
       }
 
@@ -230,12 +232,15 @@ export default {
           }
         }
       } catch (e) {
+        isValid = false
         this.handleError('date', e)
       }
+
+      return isValid
     },
     validate() {
-      ;['date', 'month', 'year'].forEach(name => {
-        this.validateInput(name)
+      return ['date', 'month', 'year'].every(name => {
+        return this.validateInput(name)
       })
     },
     handleError(inputName, errorType) {
@@ -331,7 +336,7 @@ export default {
     // width: auto;
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(2, min-content) 1fr;
+    grid-template-columns: repeat(2, min-content) 5em;
     grid-template-rows: repeat(3, auto);
     grid-auto-flow: column;
     grid-gap: 0 0.5rem;

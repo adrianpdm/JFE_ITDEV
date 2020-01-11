@@ -67,8 +67,9 @@
           <td :colspan="3"
               style="padding: 0;">
             <button class="x-table-input__table__btn-add"
-                    @click="onAddNewRow">
-              <b>+</b>&nbsp;&nbsp;Tambah Riwayat
+                    @click="onAddNewRow"
+                    style="font-size: 1.1em;">
+              <b>+</b>&nbsp;&nbsp;Tambah Data
             </button>
           </td>
         </tr>
@@ -120,9 +121,6 @@ export default {
       itemId: 1
     }
   },
-  created() {
-    this.onAddNewRow()
-  },
   methods: {
     validateRow(item, index, column) {
       this.toggleFocus(!item[column.prop], item, index, column)
@@ -137,6 +135,9 @@ export default {
         }
         return truthy
       })
+    },
+    validate(){
+      return this.validateAll()
     },
     getCellValue(item, index, column) {
       return item[column.prop]
@@ -364,14 +365,12 @@ export default {
 }
 
 tr {
-  transition: all 0.5s ease-in-out;
   background-color: white;
 }
 
 .row-transition {
   &-leave-to {
     opacity: 0;
-    transform: translateX(3rem);
   }
   &-move {
     transition: all 0.3s ease-out;

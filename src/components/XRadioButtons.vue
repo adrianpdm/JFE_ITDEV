@@ -15,6 +15,7 @@
                 :error="!!errorMsg"
                 @click.capture="onClickButton(opt)">
           <input type="radio"
+                 tabindex="-1"
                  :name="name"
                  :value="opt"
                  v-model="mValue"
@@ -75,6 +76,7 @@ export default {
         this.errorMsg = null
         this.isFocused = false
       }
+      return !this.errorMsg
     },
     onClickButton(val) {
       this.mValue = val
@@ -140,6 +142,9 @@ export default {
       cursor: pointer;
     }
 
+    &:not([error]):focus {
+      border: 2px solid var(--input-border-active-color);
+    }
     &[active] {
       background-color: var(--input-border-active-color);
       color: white;
