@@ -32,7 +32,6 @@
                         @click="onMoveDown(row, row_index)">
                 </button>
                 <button class="btn-action btn-danger"
-                        :disabled="mData.length <= 1"
                         text="Hapus"
                         data-icon="✗"
                         @click="onRemove(row, row_index)">
