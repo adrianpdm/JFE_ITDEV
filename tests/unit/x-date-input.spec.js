@@ -26,9 +26,9 @@ const mState = Object.freeze({
         month: false,
         year: false,
     },
-    mDate: null,
-    mMonth: null,
-    mYear: null
+    m_date: null,
+    m_month: null,
+    m_year: null
 })
 
 const wrapper = mount(XDateInput, {
