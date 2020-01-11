@@ -304,13 +304,15 @@ export default {
   left: 0;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.15);
 }
 
 #progress-modal {
+  position: relative;
+  top: 20vh;
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
