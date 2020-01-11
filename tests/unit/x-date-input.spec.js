@@ -20,6 +20,18 @@ const mAttrs = Object.freeze({
     autofocus: true
 })
 
+const mState = Object.freeze({
+    errorMsg: '',
+    isFocused: {
+        date: false,
+        month: false,
+        year: false
+    },
+    mDate: null,
+    mMonth: null,
+    mYear: null
+})
+
 const wrapper = mount(XDateInput, {
     propsData: mProps,
     attrs: mAttrs
@@ -30,9 +42,21 @@ describe('XDateInput', () => {
         it('has required props', () => {
             Helper.hasRequiredProps(wrapper, mProps);
         })
+        it('correctly setup data as function', () => {
+            Helper.isDataSetupAsFunction(wrapper)
+        })
+        it('has required initial state values', () => {
+            Helper.hasRequiredState(wrapper, mState)
+        })
     })
 
     describe('#mounted', () => {
+        it('has a <label>', () => {
+            const label = wrapper.find('label')
+            expect(label.is('label'))
+                .to.be.true
+        })
+
         const inputs = {
             "date-input": {
                 type: "number",
@@ -75,6 +99,11 @@ describe('XDateInput', () => {
                     )
                 })
             }
+        })
+        it('has a <p> element', () => {
+            const p = wrapper.find('p')
+            expect(p.is('p'))
+                .to.be.true
         })
     })
 })
