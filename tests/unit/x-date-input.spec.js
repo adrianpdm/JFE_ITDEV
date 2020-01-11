@@ -16,7 +16,11 @@ const mAttrs = Object.freeze({
 })
 
 const mState = Object.freeze({
-    errorMsg: '',
+    errorMsg: {
+        date: null,
+        month: null,
+        year: null
+    },
     isFocused: {
         date: false,
         month: false,
@@ -65,7 +69,7 @@ describe('XDateInput', () => {
             },
             "year-input": {
                 type: "number",
-                min: 1900,
+                min: 0,
                 max: new Date().getFullYear()
             }
         }
