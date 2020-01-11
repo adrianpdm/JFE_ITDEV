@@ -5,6 +5,7 @@ import Helper from "../helper"
 import XDateInput from "../../src/components/XDateInput.vue"
 
 const mProps = Object.freeze({
+    label: 'props_label',
     date: 1,
     month: 1,
     year: 2020
