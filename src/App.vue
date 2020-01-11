@@ -43,6 +43,11 @@
         <XRadioButtons label="Jenis Kelamin"
                        :options="['Laki-laki', 'Perempuan']"
                        v-model="gender" />
+        <br>
+        <XTableInput :columns="tableColumns"
+                     :data-template="jobHistoryTemplate"
+                     v-model="jobHistory"
+                     label="Riwayat Pekerjaan" />
       </div>
     </transition>
   </div>
@@ -52,6 +57,7 @@
 import XInput from "./components/XInput"
 import XDateInput from "./components/XDateInput"
 import XRadioButtons from "./components/XRadioButtons"
+import XTableInput from "./components/XTableInput"
 
 export default {
   name: 'app',
@@ -59,9 +65,50 @@ export default {
     XInput,
     XDateInput,
     XRadioButtons,
+    XTableInput
   },
   data() {
     return {
+      tableColumns: [
+        {
+          prop: 'company',
+          label: 'Perusahaan',
+          inputAttrs: {
+            type: 'text'
+          }
+        },
+        {
+          prop: 'position',
+          label: 'Posisi',
+          inputAttrs: {
+            type: 'text'
+          }
+        },
+        {
+          prop: 'begin_date',
+          label: 'Dari Tahun',
+          inputAttrs: {
+            type: 'number',
+            min: 0,
+            max: 9999
+          }
+        },
+        {
+          prop: 'end_date',
+          label: 'Sampai Tahun',
+          inputAttrs: {
+            type: 'number',
+            min: 0,
+            max: 9999
+          }
+        },
+      ],
+      jobHistoryTemplate: {
+        company: null,
+        position: null,
+        begin_date: null,
+        end_date: null
+      },
       name: '',
       address: '',
       birthDate: {
@@ -70,6 +117,7 @@ export default {
         year: null
       },
       gender: '',
+      jobHistory: [],
 
       formId: 1
     }
@@ -87,6 +135,7 @@ export default {
             year: null
           }
           this.gender = ''
+          this.jobHistory = []
         })
     }
   }
@@ -193,7 +242,7 @@ body {
   #form {
     width: 100%;
 
-    > * {
+    > *:not(.x-table-input) {
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 0.5rem;
@@ -222,7 +271,7 @@ body {
   }
 
   #form {
-    > * {
+    > *:not(.x-table-input) {
       display: grid;
       grid-template-columns: 120px 300px 120px;
       gap: 0 1rem;
@@ -243,10 +292,15 @@ body {
 }
 
 button {
+  cursor: pointer;
   background-color: transparent;
   &:focus,
   &:active {
     outline: none;
+  }
+  &[disabled] {
+    cursor: not-allowed !important;
+    opacity: 0.5;
   }
 }
 
@@ -263,7 +317,7 @@ button {
   display: block;
   font-size: 1em;
   font-weight: normal;
-  color: rgba(84, 110, 122, 1);
+  color: rgb(52, 70, 79);
 }
 
 .x-base__input {
@@ -391,9 +445,28 @@ button {
     box-shadow: 0 0 0.5em 0 rgba(0, 145, 255, 0.516);
   }
 
-  &:hover {
+  &:not([disabled]):hover {
     color: white;
     background-color: rgba(33, 150, 243, 1);
+  }
+
+  & + & {
+    margin-left: 0.5em;
+  }
+
+  &.btn-danger {
+    border: 1px solid rgba(229, 57, 53, 1);
+    color: rgba(229, 57, 53, 1);
+
+    &:hover {
+      color: white;
+      background-color: rgba(229, 57, 53, 1);
+    }
+
+    &:active,
+    &:focus {
+      box-shadow: 0 0 0.5em 0 rgba(229, 57, 53, 0.5);
+    }
   }
 }
 
