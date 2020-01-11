@@ -13,12 +13,12 @@
                 :key="index"
                 :active="opt === mValue"
                 :error="!!errorMsg"
-                @click.capture="mValue = opt">
+                @click.capture="onClickButton(opt)">
           <input type="radio"
                  :name="name"
                  :value="opt"
                  v-model="mValue"
-                 @input="onInput">
+                 style="pointer-events: none;">
           <label>
             {{opt}}
           </label>
@@ -76,8 +76,8 @@ export default {
         this.isFocused = false
       }
     },
-    onInput(e){
-      this.mValue = e.target.value
+    onClickButton(val) {
+      this.mValue = val
       this.validate()
       this.emitChange()
     },
