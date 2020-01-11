@@ -290,7 +290,7 @@ export default {
       ;['date', 'month', 'year'].forEach(inputName => {
         this[`m_${inputName}`] = null
         this.handleError(inputName, 'empty');
-        this.$set(this.isFocused, inputName, false)
+        this.$set(this.isFocused, inputName, true)
       })
       this.emitChange()
     },
