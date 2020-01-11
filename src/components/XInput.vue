@@ -125,22 +125,4 @@ export default {
 .x-input {
   font-size: 1rem;
 }
-
-@keyframes shake {
-  0% {
-    transform: translateX(0);
-  }
-
-  25% {
-    transform: translateX(0.5em);
-  }
-
-  75% {
-    transform: translateX(-0.5em);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
-}
 </style>
