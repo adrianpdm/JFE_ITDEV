@@ -1,65 +1,75 @@
 <template>
   <div id="app">
-    <header id="app-header">
-      <h1 id="form-title">
-        Form Pendaftaran
-      </h1>
-      <button class="btn-action action-new"
-              style="flex: 0 0 auto;"
-              @click="onCreateNewForm">
-        <b>+</b>&nbsp;&nbsp;Buat Form Baru
-      </button>
-    </header>
-    <p id="form-desc">
-      Lengkapi isian di bawah ini sesuai dengan informasi yang diminta.
-    </p>
-    <br>
-    <transition name="slide-fade"
-                mode="out-in">
-      <div id="form"
-           :key="formId">
-        <XInput input-element="input"
-                name="nama"
-                label="Nama"
-                type="text"
-                placeholder="Masukkan nama Anda..."
-                v-model="name" />
-        <br>
-        <XDateInput name="tanggal_lahir"
-                    label="Tanggal Lahir"
-                    :placeholders="{date: '1', month: '1', year: '1980'}"
-                    :date.sync="birthDate.date"
-                    :month.sync="birthDate.month"
-                    :year.sync="birthDate.year" />
-        <br>
-        <XInput input-element="textarea"
-                name="alamat"
-                label="Alamat"
-                type="text"
-                placeholder="Masukkan alamat Anda..."
-                rows="3"
-                v-model="address" />
-        <br>
-        <XRadioButtons label="Jenis Kelamin"
-                       :options="['Laki-laki', 'Perempuan']"
-                       v-model="gender" />
-        <br>
-        <br>
-        <XTableInput :columns="tableColumns"
-                     :data-template="jobHistoryTemplate"
-                     v-model="jobHistory"
-                     label="Riwayat Pekerjaan (kosongkan jika tidak ada)" />
+    <div>
+      <header id="app-header">
+        <h1 id="form-title">
+          Form Pendaftaran
+        </h1>
+        <button class="btn-action action-new"
+                style="flex: 0 0 auto;"
+                @click="onCreateNewForm">
+          <b>+</b>&nbsp;&nbsp;Buat Form Baru
+        </button>
+      </header>
+      <p id="form-desc">
+        Lengkapi isian di bawah ini sesuai dengan informasi yang diminta.
+      </p>
+      <br>
+      <transition name="slide-fade"
+                  mode="out-in">
+        <div id="form"
+             :key="formId">
+          <XInput input-element="input"
+                  name="nama"
+                  label="Nama"
+                  type="text"
+                  placeholder="Masukkan nama Anda..."
+                  v-model="name" />
+          <br>
+          <XDateInput name="tanggal_lahir"
+                      label="Tanggal Lahir"
+                      :placeholders="{date: '1', month: '1', year: '1980'}"
+                      :date.sync="birthDate.date"
+                      :month.sync="birthDate.month"
+                      :year.sync="birthDate.year" />
+          <br>
+          <XInput input-element="textarea"
+                  name="alamat"
+                  label="Alamat"
+                  type="text"
+                  placeholder="Masukkan alamat Anda..."
+                  rows="3"
+                  v-model="address" />
+          <br>
+          <XRadioButtons label="Jenis Kelamin"
+                         :options="['Laki-laki', 'Perempuan']"
+                         v-model="gender" />
+          <br>
+          <br>
+          <XTableInput :columns="tableColumns"
+                       :data-template="jobHistoryTemplate"
+                       v-model="jobHistory"
+                       label="Riwayat Pekerjaan (hapus jika tidak ada)" />
+        </div>
+      </transition>
+      <br>
+      <br>
+      <br>
+      <div style="display: flex; justify-content: flex-end;">
+        <button class="btn-action"
+                @click="onSubmit"
+                style="font-size: 1em; float:right;">
+          Daftar
+        </button>
       </div>
-    </transition>
-    <br>
-    <br>
-    <br>
-    <div style="display: flex; justify-content: flex-end;">
-      <button class="btn-action"
-              @click="onSubmit"
-              style="font-size: 1em; float:right;">
-        Daftar
-      </button>
+    </div>
+    <div style="background-color: #eee; padding: 1rem; margin-top: 6rem;">
+      <code>
+        Preview
+      </code>
+      <pre v-html="stringified"
+           style="word-break: break-all; overflow: hidden; white-space: pre-wrap;">
+      </pre>
     </div>
   </div>
 </template>
@@ -130,16 +140,32 @@ export default {
       gender: '',
       jobHistory: [],
 
-      formId: 1
+      formId: 1,
+
+      stringified: '',
+      stringifyInterval: null,
+      isDev: true
     }
   },
   created() {
     this.initHistory()
   },
+  computed: {
+
+  },
   methods: {
+    stringifyFormData() {
+      this.stringified = JSON.stringify({
+        name: this.name,
+        address: this.address,
+        birthDate: this.birthDate,
+        gender: this.gender,
+        jobHistory: this.jobHistory
+      }, null, 4)
+    },
     initHistory() {
       this.jobHistory = [
-        // JSON.parse(JSON.stringify(this.jobHistoryTemplate))
+        JSON.parse(JSON.stringify(this.jobHistoryTemplate))
       ]
     },
     onCreateNewForm(animate = true) {
@@ -186,6 +212,22 @@ export default {
             }, 400)
           }
         })
+    }
+  },
+  watch: {
+    isDev: {
+      immediate: true,
+      handler(v) {
+        if (this.stringifyInterval) {
+          clearInterval(this.stringifyInterval)
+        }
+
+        if (!!v) {
+          this.stringifyInterval = setInterval(() => {
+            this.stringifyFormData()
+          }, 300)
+        }
+      }
     }
   }
 }
