@@ -9,7 +9,7 @@ export function hasRequiredProps(wrapper, requiredProps) {
     Object.keys(requiredProps).forEach(key => {
         let actual = wrapper.props(key)
         let expected = requiredProps[key]
-        assert.equal(actual, expected, `has props '${key}'`)
+        assert.strictEqual(actual, expected, `has props '${key}'`)
     })
 }
 
