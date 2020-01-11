@@ -22,10 +22,20 @@ export function hasRequiredState(Component, requiredState) {
         ? Component.data()
         : Component.data
 
-    const check = (actual, expected, rootKey = '') => {
+    const check = (actual, expected, namespace = '') => {
         Object.keys(expected).forEach(key => {
+            assert.isTrue(
+                actual.hasOwnProperty(key),
+                `Cant find ${key} in ${namespace || 'data'}`
+            )
             if (!!expected[key] && typeof expected[key] === 'object') {
-                check(actual[key], expected[key], key)
+                const ns = `${namespace ? namespace + '.' : ''}${key}`
+                assert.equal(
+                    typeof expected[key],
+                    typeof actual[key],
+                    `${ns} should be typeof object`
+                )
+                check(actual[key], expected[key], ns)
             } else {
                 assert.strictEqual(actual[key], expected[key])
             }
