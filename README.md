@@ -10,4 +10,4 @@ Jabar Digital Service
 - Components are unit-tested using Mocha and Chai.
 - Live preview of form data in JSON format.
 
-adrian.padmodihardjo@gmail.com
+[**Open in Github Pages**](https://adrianpdm.github.io/JFE_ITDEV "adrianpdm.github.io/JFE_ITDEV/")
