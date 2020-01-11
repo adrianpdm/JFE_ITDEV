@@ -22,11 +22,7 @@ const mAttrs = Object.freeze({
 
 const mState = Object.freeze({
     errorMsg: '',
-    isFocused: {
-        date: false,
-        month: false,
-        year: false
-    },
+    isFocused: false,
     mDate: null,
     mMonth: null,
     mYear: null
@@ -46,7 +42,7 @@ describe('XDateInput', () => {
             Helper.isDataSetupAsFunction(wrapper)
         })
         it('has required initial state values', () => {
-            Helper.hasRequiredState(wrapper, mState)
+            Helper.hasRequiredState(XDateInput, mState)
         })
     })
 
