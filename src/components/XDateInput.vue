@@ -2,86 +2,82 @@
   <div class="x-date-input"
        v-cloak>
     <div class="x-base__input-header">
-      <label class="x-base__label">
+      <label class="x-base__label align-to-box">
         {{label}}
       </label>
-      <button class="x-base__btn-clear"
-              :disabled="shouldButtonDisabled"
-              @click="onClear">
-        Hapus
-      </button>
     </div>
-    <div class="x-date-input__inputs">
-      <label class="x-date-input__input-label">
-        Tanggal
-      </label>
-      <input role="date-input"
-             label="Tanggal"
-             name="date"
-             class="x-base__input"
-             type="number"
-             :min="1"
-             :max="31"
-             :placeholder="placeholders.date"
-             v-model="m_date"
-             v-on="inputElementListeners"
-             style="width: 72px;">
-      <XInputHint :height="3"
-                  :active="isFocused.date"
-                  :error="!!errorMsg.date" />
-      <span class="x-date-input__divider">
-        /
-      </span>
-      <label class="x-date-input__input-label">
-        Bulan
-      </label>
-      <input role="month-input"
-             label="Bulan"
-             name="month"
-             class="x-base__input"
-             type="number"
-             :min="1"
-             :max="12"
-             :placeholder="placeholders.month"
-             v-model="m_month"
-             v-on="inputElementListeners"
-             style="width: 72px;">
-      <XInputHint :height="3"
-                  :active="isFocused.month"
-                  :error="!!errorMsg.month" />
-      <span class="x-date-input__divider">
-        /
-      </span>
-      <label class="x-date-input__input-label">
-        Tahun
-      </label>
-      <input role="year-input"
-             label="Tahun"
-             name="year"
-             class="x-base__input"
-             type="number"
-             :min="1900"
-             :max="currentYear"
-             :placeholder="placeholders.year"
-             v-model="m_year"
-             v-on="inputElementListeners"
-             style="width: 144px;">
-      <XInputHint :height="3"
-                  :active="isFocused.year"
-                  :error="!!errorMsg.year" />
+    <div>
+      <div class="x-date-input__inputs">
+        <label class="x-date-input__input-label">
+          Tanggal
+        </label>
+        <input role="date-input"
+               label="Tanggal"
+               name="date"
+               class="x-base__input"
+               type="number"
+               :min="1"
+               :max="31"
+               :placeholder="placeholders.date"
+               v-model="m_date"
+               v-on="inputElementListeners"
+               style="width: 3em;">
+        <XInputHint :height="3"
+                    :active="isFocused.date"
+                    :error="!!errorMsg.date" />
+        <label class="x-date-input__input-label">
+          Bulan
+        </label>
+        <input role="month-input"
+               label="Bulan"
+               name="month"
+               class="x-base__input"
+               type="number"
+               :min="1"
+               :max="12"
+               :placeholder="placeholders.month"
+               v-model="m_month"
+               v-on="inputElementListeners"
+               style="width: 3em;">
+        <XInputHint :height="3"
+                    :active="isFocused.month"
+                    :error="!!errorMsg.month" />
+        <label class="x-date-input__input-label">
+          Tahun
+        </label>
+        <input role="year-input"
+               label="Tahun"
+               name="year"
+               class="x-base__input"
+               type="number"
+               :min="1900"
+               :max="currentYear"
+               :placeholder="placeholders.year"
+               v-model="m_year"
+               v-on="inputElementListeners"
+               style="width: 100%;">
+        <XInputHint :height="3"
+                    :active="isFocused.year"
+                    :error="!!errorMsg.year" />
+      </div>
+      <p class="x-base__hint--list"
+         :active="hasErrors"
+         :key="errorsLength">
+        <ul>
+          <template v-for="(msg, inputName) in errorMsg">
+            <li v-if="msg"
+                :key="inputName">
+              {{msg}}
+            </li>
+          </template>
+        </ul>
+      </p>
     </div>
-    <p class="x-base__hint--list"
-       :active="hasErrors"
-       :key="errorsLength">
-      <ul>
-        <template v-for="(msg, inputName) in errorMsg">
-          <li v-if="msg"
-              :key="inputName">
-            {{msg}}
-          </li>
-        </template>
-      </ul>
-    </p>
+    <button class="x-base__btn-clear align-to-box"
+            :disabled="shouldButtonDisabled"
+            @click="onClear">
+      Hapus
+    </button>
   </div>
 </template>
 
@@ -324,16 +320,17 @@ export default {
   font-size: 1rem;
 
   &__inputs {
-    min-width: 0;
-    width: auto;
+    // min-width: 0;
+    // width: auto;
+    width: 100%;
     display: grid;
-    grid-template-columns: repeat(5, minmax(min-content, max-content));
+    grid-template-columns: repeat(2, min-content) 1fr;
     grid-template-rows: repeat(3, auto);
     grid-auto-flow: column;
     grid-gap: 0 0.5rem;
 
     > .x-date-input__input-label {
-      opacity: 0.65;
+      opacity: 0.45;
       font-size: 0.85em;
       margin-bottom: 0.25em;
     }
@@ -349,16 +346,12 @@ export default {
   }
 }
 
-.x-date-input__divider {
-  grid-row: 1 / span 3;
+@media screen and (min-width: 600px) {
+  .align-to-box {
+    position: relative;
+    top: 1rem * 2;
+  }
 
-  display: flex;
-  align-items: center;
-  width: 0.5em;
-  padding-top: 0.85em;
-
-  color: currentColor;
-
-  opacity: 0.5;
+  
 }
 </style>

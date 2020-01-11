@@ -4,26 +4,28 @@
       <label class="x-base__label">
         {{label}}
       </label>
-      <button class="x-base__btn-clear"
-              :disabled="!mValue"
-              @click="onClear">
-        Hapus
-      </button>
     </div>
-    <input v-if="inputElement === 'input'"
-           v-bind="inputElementProps"
-           v-on="inputElementListeners" />
-    <textarea v-else-if="inputElement === 'textarea'"
-              v-bind="inputElementProps"
-              v-on="inputElementListeners">
+    <div class="x-input__container">
+      <input v-if="inputElement === 'input'"
+             v-bind="inputElementProps"
+             v-on="inputElementListeners" />
+      <textarea v-else-if="inputElement === 'textarea'"
+                v-bind="inputElementProps"
+                v-on="inputElementListeners">
     </textarea>
-    <XInputHint :height="3"
-                 :active="isFocused"
-                 :error="!!errorMsg" />
-    <p class="x-base__hint"
-       :active="!!errorMsg">
-      {{errorMsg}}
-    </p>
+      <XInputHint :height="3"
+                  :active="isFocused"
+                  :error="!!errorMsg" />
+      <p class="x-base__hint"
+         :active="!!errorMsg">
+        {{errorMsg}}
+      </p>
+    </div>
+    <button class="x-base__btn-clear"
+            :disabled="!mValue"
+            @click="onClear">
+      Hapus
+    </button>
   </div>
 </template>
 
@@ -88,7 +90,7 @@ export default {
       return !this.errorMsg
     },
     onBlur(e) {
-      if (this.validate()){
+      if (this.validate()) {
         this.isFocused = false
       }
     },
@@ -113,7 +115,7 @@ export default {
       }
     },
     mValue: {
-      handler(v){
+      handler(v) {
         this.validate()
       }
     }

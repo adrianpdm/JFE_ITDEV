@@ -33,10 +33,11 @@ export default {
 .x-input__state {
   position: relative;
   display: block;
-  width: 100%;
+  width: calc(100% - #{0.25rem * 2});
+  margin: 0 auto;
 
   text-align: left;
-  background-color: var(--input-border-color);
+  background-color: rgba(176, 190, 197, 0.5);
 
   &::after {
     content: "";
